@@ -14,7 +14,9 @@
         {{ home.guests }} guests,
         {{ home.bedrooms }} rooms,
         {{ home.beds }} beds,
-        {{ home.bathrooms }} baths
+        {{ home.bathrooms }} baths<br>
+        {{ home.description }}
+        <div style="width:400px; height:400px;" ref="map"></div>
     </div>
 </template>
 
@@ -33,6 +35,10 @@ export default {
         return {
             home,
         };
+    },
+    mounted() {
+        const { lat, lng } = this.home._geoloc;
+        this.$maps.showMap(this.$refs.map, lat, lng);
     },
 }
 </script>
