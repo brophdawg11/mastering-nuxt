@@ -21,20 +21,15 @@
 </template>
 
 <script>
-import homes from '~/data/homes.json';
-
 export default {
     head() {
         return {
             title: this.home.title,
         };
     },
-    data() {
-        const { id } = this.$route.params;
-        const home = homes.find(h => h.objectID === id);
-        return {
-            home,
-        };
+    async asyncData({ $api, params }) {
+        const home = await $api.getHome(params.id)
+        return { home };
     },
     mounted() {
         this.showMap();
