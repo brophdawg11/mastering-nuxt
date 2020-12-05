@@ -27,9 +27,14 @@ export default {
             title: this.home.title,
         };
     },
-    async asyncData({ $api, params }) {
-        const home = await $api.getHome(params.id)
-        return { home };
+    async asyncData({ $api, params, error }) {
+        const { ok, status, statusText, home } = await $api.getHome(params.id)
+        if (!ok) {
+            return error({ statusCode: status, message: statusText });
+        }
+        return {
+            home,
+        };
     },
     mounted() {
         this.showMap();
