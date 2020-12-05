@@ -37,8 +37,13 @@ export default {
         };
     },
     mounted() {
-        const { lat, lng } = this.home._geoloc;
-        this.$maps.showMap(this.$refs.map, lat, lng);
+        this.showMap();
     },
+    methods: {
+        showMap() {
+            const { lat, lng } = this.home._geoloc;
+            this.$maps.showMap(this.$refs.map, lat, lng);
+        }
+    }
 }
 </script>
