@@ -30,7 +30,10 @@ export default {
     async asyncData({ $api, params, error }) {
         const { ok, status, statusText, home } = await $api.getHome(params.id)
         if (!ok) {
-            return error({ statusCode: status, message: statusText });
+            return error({
+                statusCode: status,
+                message: statusText,
+            });
         }
         return {
             home,
