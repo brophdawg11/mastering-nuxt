@@ -17,6 +17,14 @@
         {{ home.bathrooms }} baths<br>
         {{ home.description }}
         <div style="width:400px; height:400px;" ref="map"></div>
+        <ul>
+            <li v-for="review in reviews" :key="review.objectID">
+                <img :src="review.reviewer.image" /><br>
+                {{ review.reviewer.name }}<br>
+                {{ formatDate(review.date) }}<br>
+                <ShortText :text="review.comment" :target="50" />
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -28,15 +36,25 @@ export default {
         };
     },
     async asyncData({ $api, params, error }) {
-        const { ok, status, statusText, home } = await $api.getHome(params.id)
-        if (!ok) {
+        const homeResponse = await $api.getHome(params.id)
+        if (!homeResponse.ok) {
             return error({
-                statusCode: status,
-                message: statusText,
+                statusCode: homeResponse.status,
+                message: homeResponse.statusText,
             });
         }
+
+        const reviewsResponse = await $api.getReviewsByHomeId(params.id)
+        if (!reviewsResponse.ok) {
+            return error({
+                statusCode: homeResponse.status,
+                message: homeResponse.statusText,
+            });
+        }
+
         return {
-            home,
+            home: homeResponse.data,
+            reviews: reviewsResponse.data.hits,
         };
     },
     mounted() {
@@ -46,7 +64,14 @@ export default {
         showMap() {
             const { lat, lng } = this.home._geoloc;
             this.$maps.showMap(this.$refs.map, lat, lng);
-        }
+        },
+        formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString(undefined, {
+                month: 'long',
+                year: 'numeric',
+            });
+        },
     }
 }
 </script>

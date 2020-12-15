@@ -6,28 +6,57 @@ const headers = {
     'X-Algolia-API-Key': searchOnlyApiKey,
 };
 
+async function unwrap(res) {
+    const data = await res.json();
+    const { ok, status, statusText } = res;
+    return {
+        ok,
+        status,
+        statusText,
+        data,
+    };
+}
+
+function getErrorResponse(err) {
+    return {
+        ok: false,
+        status: 500,
+        statusText: err.message,
+        home: null,
+    };
+}
+
 export default function apiPlugin(ctx, inject) {
     async function getHome(homeId) {
         const url = `${baseUrl}/1/indexes/homes/${homeId}`;
         try {
-            const response = await fetch(url, { headers });
-            const data = await response.json();
-            const { ok, status, statusText } = response;
-            return {
-                ok,
-                status,
-                statusText,
-                home: data,
-            };
+            const res = await fetch(url, { headers });
+            return await unwrap(res);
         } catch (e) {
-            return {
-                ok: false,
-                status: 500,
-                statusText: e.message,
-                home: null,
-            };
+            return getErrorResponse(e);
         }
     }
 
-    inject('api', { getHome });
+    async function getReviewsByHomeId(homeId) {
+        const url = `${baseUrl}/1/indexes/reviews/query`;
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    filters: `homeId:${homeId}`,
+                    hitsPerPage: 6,
+                    attributesToHighlight: [],
+                }),
+            });
+            return await unwrap(res);
+        } catch (e) {
+            return getErrorResponse(e);
+        }
+    }
+
+    inject('api', {
+        getHome,
+        getReviewsByHomeId,
+    });
 }
