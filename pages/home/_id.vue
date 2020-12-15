@@ -25,6 +25,11 @@
                 <ShortText :text="review.comment" :target="50" />
             </li>
         </ul>
+        <img :src="user.image" /><br>
+        {{ user.name }}<br>
+        {{ formatDate(user.joined) }}<br>
+        {{ user.reviewCount }}<br>
+        {{ user.description }}
     </div>
 </template>
 
@@ -47,14 +52,23 @@ export default {
         const reviewsResponse = await $api.getReviewsByHomeId(params.id)
         if (!reviewsResponse.ok) {
             return error({
-                statusCode: homeResponse.status,
-                message: homeResponse.statusText,
+                statusCode: reviewsResponse.status,
+                message: reviewsResponse.statusText,
+            });
+        }
+
+        const usersResponse = await $api.getUserByHomeId(params.id)
+        if (!usersResponse.ok) {
+            return error({
+                statusCode: usersResponse.status,
+                message: usersResponse.statusText,
             });
         }
 
         return {
             home: homeResponse.data,
             reviews: reviewsResponse.data.hits,
+            user: usersResponse.data.hits[0],
         };
     },
     mounted() {

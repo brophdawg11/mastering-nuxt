@@ -55,8 +55,26 @@ export default function apiPlugin(ctx, inject) {
         }
     }
 
+    async function getUserByHomeId(homeId) {
+        const url = `${baseUrl}/1/indexes/users/query`;
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    filters: `homeId:${homeId}`,
+                    attributesToHighlight: [],
+                }),
+            });
+            return await unwrap(res);
+        } catch (e) {
+            return getErrorResponse(e);
+        }
+    }
+
     inject('api', {
         getHome,
         getReviewsByHomeId,
+        getUserByHomeId,
     });
 }
