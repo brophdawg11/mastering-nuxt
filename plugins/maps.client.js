@@ -1,11 +1,10 @@
 export default function mapsClientPlugin(ctx, inject) {
 
     function addScript() {
-        return new Promise((resolve, reject) => {
+        window.initMapPromise = new Promise((resolve, reject) => {
             const scriptId = 'google-map';
             if (document.getElementById(scriptId)) {
-                resolve();
-                return;
+                return window.initMapPromise.then(resolve, reject);
             }
             const script = document.createElement('script');
             script.id = scriptId;
@@ -18,6 +17,7 @@ export default function mapsClientPlugin(ctx, inject) {
             window.initMap = resolve;
             document.head.appendChild(script);
         });
+        return window.initMapPromise;
     }
 
     function renderMap(el, lat, lng) {
@@ -39,5 +39,22 @@ export default function mapsClientPlugin(ctx, inject) {
         renderMap(el, lat, lng);
     }
 
-    inject('maps', { showMap });
+    async function initAutoComplete(inputEl, placeChangedCb) {
+        await addScript();
+        const autoComplete = new window.google.maps.places.Autocomplete(inputEl, {
+            types: ['(cities)'],
+        });
+        autoComplete.addListener('place_changed', () => {
+            const place = autoComplete.getPlace();
+            inputEl.dispatchEvent(new CustomEvent('selected', {
+                detail: { place }
+            }));
+        });
+        return autoComplete;
+    }
+
+    inject('maps', {
+        showMap,
+        initAutoComplete,
+    });
 }
