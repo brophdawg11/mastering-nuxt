@@ -57,8 +57,8 @@ export default {
 
         return {
             home: responses[0].data,
-            reviews: responses[1].data.hits,
-            user: responses[2].data.hits[0],
+            reviews: responses[1].data,
+            user: responses[2].data,
         };
     },
     mounted() {

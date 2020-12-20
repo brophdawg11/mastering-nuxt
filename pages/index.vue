@@ -22,9 +22,19 @@ export default {
             }],
         };
     },
-    data() {
+    async asyncData({ $api, params, error }) {
+        const response = await $api.getHomes();
+        const { ok, status, statusText, data } = response;
+
+        if (!ok) {
+            return error({
+                statusCode: status,
+                message: statusText,
+            });
+        }
+
         return {
-            homes: homes.slice(0, 3),
+            homes: data,
         };
     },
 }
