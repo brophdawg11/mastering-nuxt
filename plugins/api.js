@@ -49,7 +49,7 @@ function getErrorResponse(err) {
 }
 
 export default function apiPlugin(ctx, inject) {
-    async function getHomes(homeId) {
+    async function getHomes() {
         const url = `${baseUrl}/1/indexes/homes`;
         try {
             const res = await fetch(url, { headers });

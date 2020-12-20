@@ -1,10 +1,10 @@
 export default function mapsClientPlugin(ctx, inject) {
-
     function addScript() {
         window.initMapPromise = new Promise((resolve, reject) => {
             const scriptId = 'google-map';
             if (document.getElementById(scriptId)) {
-                return window.initMapPromise.then(resolve, reject);
+                window.initMapPromise.then(resolve, reject);
+                return;
             }
             const script = document.createElement('script');
             script.id = scriptId;
@@ -21,7 +21,7 @@ export default function mapsClientPlugin(ctx, inject) {
     }
 
     function renderMap(el, lat, lng) {
-        const { maps } = window.google;
+        const { maps } = window.google;
         const mapOptions = {
             zoom: 18,
             center: new maps.LatLng(lat, lng),
@@ -39,7 +39,7 @@ export default function mapsClientPlugin(ctx, inject) {
         renderMap(el, lat, lng);
     }
 
-    async function initAutoComplete(inputEl, placeChangedCb) {
+    async function initAutoComplete(inputEl) {
         await addScript();
         const autoComplete = new window.google.maps.places.Autocomplete(inputEl, {
             types: ['(cities)'],
@@ -47,7 +47,7 @@ export default function mapsClientPlugin(ctx, inject) {
         autoComplete.addListener('place_changed', () => {
             const place = autoComplete.getPlace();
             inputEl.dispatchEvent(new CustomEvent('selected', {
-                detail: { place }
+                detail: { place },
             }));
         });
         return autoComplete;

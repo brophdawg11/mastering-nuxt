@@ -1,8 +1,10 @@
 <template>
     <div>
         <header style="background-color: #eee;">
-            <NuxtLink to="/">Home</NuxtLink>
-            <input ref="search" @selected="onSelected" />
+            <NuxtLink to="/">
+                Home
+            </NuxtLink>
+            <input ref="search" @selected="onSelected">
         </header>
         <Nuxt />
     </div>
@@ -30,5 +32,5 @@ export default {
             });
         },
     },
-}
+};
 </script>

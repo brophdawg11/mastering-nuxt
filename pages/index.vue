@@ -9,20 +9,8 @@
 </template>
 
 <script>
-import homes from '~/data/homes.json';
-
 export default {
-    head() {
-        return {
-            title: 'Homepage',
-            meta: [{
-                hid: 'description',
-                name: 'description',
-                content: 'This is a homepage',
-            }],
-        };
-    },
-    async asyncData({ $api, params, error }) {
+    async asyncData({ $api, error }) {
         const response = await $api.getHomes();
         const { ok, status, statusText, data } = response;
 
@@ -37,5 +25,15 @@ export default {
             homes: data,
         };
     },
-}
+    head() {
+        return {
+            title: 'Homepage',
+            meta: [{
+                hid: 'description',
+                name: 'description',
+                content: 'This is a homepage',
+            }],
+        };
+    },
+};
 </script>

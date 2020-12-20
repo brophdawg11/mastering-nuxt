@@ -6,16 +6,16 @@
 
 <script>
 export default {
-    head(){
-        return {
-            title: 'Oops!',
-        };
-    },
     props: {
         error: {
             type: Object,
             required: true,
         },
+    },
+    head() {
+        return {
+            title: 'Oops!',
+        };
     },
 };
 </script>
