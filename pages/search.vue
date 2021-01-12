@@ -1,6 +1,7 @@
 <template>
     <div>
-        Results for {{ label }}, {{ lat }}, {{ lng }}<br>
+        Results for {{ label }}<br>
+        <div ref="map" style="flost: right; width:400px; height:400px;" />
         <ul v-if="homes.length > 0">
             <li v-for="home in homes" :key="home.objectID">
                 <HomeRow :home="home" />
@@ -25,11 +26,6 @@ async function loadResults($api, query) {
 }
 
 export default {
-    head() {
-        return {
-            title: `Homes around ${this.label}`,
-        };
-    },
     async beforeRouteUpdate(to, from, next) {
         try {
             const { label, lat, lng, homes } = await loadResults(this.$api, to.query);
@@ -37,6 +33,7 @@ export default {
             this.lat = lat;
             this.lng = lng;
             this.homes = homes;
+            this.showMap();
             next();
         } catch (e) {
             next(e);
@@ -50,6 +47,19 @@ export default {
             lng,
             homes,
         };
+    },
+    head() {
+        return {
+            title: `Homes around ${this.label}`,
+        };
+    },
+    mounted() {
+        this.showMap();
+    },
+    methods: {
+        showMap() {
+            this.$maps.showMap(this.$refs.map, this.lat, this.lng);
+        },
     },
 };
 </script>
