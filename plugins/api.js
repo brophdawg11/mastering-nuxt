@@ -104,10 +104,30 @@ export default function apiPlugin(ctx, inject) {
         }
     }
 
+    async function getHomesByLocation(lat, lng, radiusInMeters = 1500) {
+        const url = `${baseUrl}/1/indexes/homes/query`;
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({
+                    aroundLatLng: `${lat},${lng}`,
+                    aroundRadius: radiusInMeters,
+                    hitsPerPage: 10,
+                    attributesToHighlight: [],
+                }),
+            });
+            return await unwrap(res, 'hits');
+        } catch (e) {
+            return getErrorResponse(e);
+        }
+    }
+
     inject('api', {
         getHomes,
         getHome,
         getReviewsByHomeId,
         getUserByHomeId,
+        getHomesByLocation,
     });
 }
