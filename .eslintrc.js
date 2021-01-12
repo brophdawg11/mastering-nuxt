@@ -5,7 +5,7 @@ module.exports = {
     ],
     extends: [
         'airbnb-base',
-        'plugin:vue/vue3-recommended',
+        'plugin:vue/recommended',
     ],
     rules: {
         indent: ['error', 4],

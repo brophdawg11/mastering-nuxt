@@ -1,5 +1,5 @@
 <template>
-    <div style="clear: left;">
+    <div style="clear: left;" v-on="$listeners">
         <img :src="home.images[0]" style="width: 200px; float:left; padding: 10px;"><br>
         {{ home.title }}<br>
         {{ home.location.address }}

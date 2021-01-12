@@ -5,7 +5,10 @@
         <ul v-if="homes.length > 0">
             <li v-for="home in homes" :key="home.objectID">
                 <NuxtLink :to="`/home/${home.objectID}`">
-                    <HomeRow :home="home" />
+                    <HomeRow
+                        :home="home"
+                        @mouseover="highlightMarker(home.objectID, true)"
+                        @mouseout="highlightMarker(home.objectID, false)" />
                 </NuxtLink>
             </li>
         </ul>
@@ -59,15 +62,35 @@ export default {
         this.showMap();
     },
     methods: {
-        getHomeMarkers() {
+        highlightMarker(homeId, isHighlighted) {
+            const el = document.getElementsByClassName(`home-${homeId}`)[0];
+            el?.classList.toggle('marker-highlight', isHighlighted);
         },
         showMap() {
             const markers = this.homes.map((home) => ({
                 // eslint-disable-next-line no-underscore-dangle
                 ...home._geoloc,
+                pricePerNight: home.pricePerNight,
+                id: home.objectID,
             }));
             this.$maps.showMap(this.$refs.map, this.lat, this.lng, markers);
         },
     },
 };
 </script>
+
+<style>
+.marker {
+    background: white;
+    border: 1px solid lightgrey;
+    border-radius: 20px;
+    font-weight: bold;
+    padding: 5px 8px;
+}
+
+.marker-highlight {
+    color: white !important;
+    background: black;
+    border: 1px solid black;
+}
+</style>

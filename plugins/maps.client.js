@@ -29,6 +29,13 @@ export default function mapsClientPlugin(ctx, inject) {
             center: new maps.LatLng(lat, lng),
             disableDefaultUI: true,
             zoomControls: true,
+            styles: [{
+                featureType: 'poi.businesses',
+                elementType: 'Labels.icon',
+                stylers: [{
+                    visibility: 'off',
+                }],
+            }],
         };
         const map = new maps.Map(el, mapOptions);
 
@@ -36,7 +43,15 @@ export default function mapsClientPlugin(ctx, inject) {
             const bounds = new window.google.maps.LatLngBounds();
             markers.forEach((home) => {
                 const position = new maps.LatLng(home.lat, home.lng);
-                const marker = new maps.Marker({ position });
+                const marker = new maps.Marker({
+                    position,
+                    icon: 'https://maps.gstatic.com/mapfiles/transparent.png',
+                    label: {
+                        text: `$${home.pricePerNight}`,
+                        className: `marker home-${home.id}`,
+                    },
+                    clickable: false,
+                });
                 marker.setMap(map);
                 bounds.extend(position);
             });
