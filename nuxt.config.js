@@ -18,6 +18,10 @@ export default {
         prefetchLinks: false,
     },
 
+    buildModules: [
+        '@nuxtjs/dotenv',
+    ],
+
     plugins: [
         '~/plugins/api',
         '~/plugins/maps.client',

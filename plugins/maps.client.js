@@ -1,3 +1,5 @@
+const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+
 export default function mapsClientPlugin(ctx, inject) {
     function addScript() {
         window.initMapPromise = new Promise((resolve, reject) => {
@@ -8,7 +10,7 @@ export default function mapsClientPlugin(ctx, inject) {
             }
             const script = document.createElement('script');
             script.id = scriptId;
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDSa2UMyIWLF5VlmG7w2lmq3UtxCj5Ic8A&libraries=places&callback=initMap';
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`;
             script.async = true;
             script.onerror = (e) => {
                 script.parentNode.removeChild(script);

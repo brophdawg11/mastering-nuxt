@@ -2,3 +2,5 @@ node_modules
 *.code-workspace
 .eslintcache
 .nuxt
+.env
+.DS_Store

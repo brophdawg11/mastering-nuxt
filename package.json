@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@nuxtjs/dotenv": "1.4.1",
     "nuxt": "2.14.7"
   },
   "devDependencies": {
