@@ -3,7 +3,7 @@
         Results for {{ label }}, {{ lat }}, {{ lng }}<br>
         <ul>
             <li v-for="home in homes" :key="home.objectID">
-                {{ home.title }}
+                <HomeRow :home="home" />
             </li>
         </ul>
     </div>

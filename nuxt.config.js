@@ -26,4 +26,8 @@ export default {
         '~/plugins/api',
         '~/plugins/maps.client',
     ],
+
+    css: [
+        '@/assets/css/reset.css',
+    ],
 };
