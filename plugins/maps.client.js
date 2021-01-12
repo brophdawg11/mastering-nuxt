@@ -22,7 +22,7 @@ export default function mapsClientPlugin(ctx, inject) {
         return window.initMapPromise;
     }
 
-    function renderMap(el, lat, lng) {
+    function renderMap(el, lat, lng, markers) {
         const { maps } = window.google;
         const mapOptions = {
             zoom: 18,
@@ -31,14 +31,26 @@ export default function mapsClientPlugin(ctx, inject) {
             zoomControls: true,
         };
         const map = new maps.Map(el, mapOptions);
-        const position = new maps.LatLng(lat, lng);
-        const marker = new maps.Marker({ position });
-        marker.setMap(map);
+
+        if (markers) {
+            const bounds = new window.google.maps.LatLngBounds();
+            markers.forEach((home) => {
+                const position = new maps.LatLng(home.lat, home.lng);
+                const marker = new maps.Marker({ position });
+                marker.setMap(map);
+                bounds.extend(position);
+            });
+            map.fitBounds(bounds);
+        } else {
+            const position = new maps.LatLng(lat, lng);
+            const marker = new maps.Marker({ position });
+            marker.setMap(map);
+        }
     }
 
-    async function showMap(el, lat, lng) {
+    async function showMap(el, lat, lng, markers) {
         await addScript();
-        renderMap(el, lat, lng);
+        renderMap(el, lat, lng, markers);
     }
 
     async function initAutoComplete(inputEl) {

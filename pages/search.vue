@@ -4,7 +4,9 @@
         <div ref="map" style="flost: right; width:400px; height:400px;" />
         <ul v-if="homes.length > 0">
             <li v-for="home in homes" :key="home.objectID">
-                <HomeRow :home="home" />
+                <NuxtLink :to="`/home/${home.objectID}`">
+                    <HomeRow :home="home" />
+                </NuxtLink>
             </li>
         </ul>
         <div v-else>
@@ -57,8 +59,14 @@ export default {
         this.showMap();
     },
     methods: {
+        getHomeMarkers() {
+        },
         showMap() {
-            this.$maps.showMap(this.$refs.map, this.lat, this.lng);
+            const markers = this.homes.map((home) => ({
+                // eslint-disable-next-line no-underscore-dangle
+                ...home._geoloc,
+            }));
+            this.$maps.showMap(this.$refs.map, this.lat, this.lng, markers);
         },
     },
 };
