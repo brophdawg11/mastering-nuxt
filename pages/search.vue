@@ -1,11 +1,14 @@
 <template>
     <div>
         Results for {{ label }}, {{ lat }}, {{ lng }}<br>
-        <ul>
+        <ul v-if="homes.length > 0">
             <li v-for="home in homes" :key="home.objectID">
                 <HomeRow :home="home" />
             </li>
         </ul>
+        <div v-else>
+            No results found
+        </div>
     </div>
 </template>
 
@@ -22,6 +25,11 @@ async function loadResults($api, query) {
 }
 
 export default {
+    head() {
+        return {
+            title: `Homes around ${this.label}`,
+        };
+    },
     async beforeRouteUpdate(to, from, next) {
         try {
             const { label, lat, lng, homes } = await loadResults(this.$api, to.query);
