@@ -20,11 +20,15 @@ export default {
 
     buildModules: [
         '@nuxtjs/dotenv',
+        '@nuxtjs/tailwindcss',
     ],
 
     plugins: [
         '~/plugins/api',
         '~/plugins/maps.client',
+    ],
+
+    modules: [
     ],
 
     css: [
